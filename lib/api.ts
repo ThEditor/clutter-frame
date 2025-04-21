@@ -56,6 +56,9 @@ export const authApi = {
       method: 'POST',
       body: JSON.stringify({ username, email, password }),
     }),
+
+  logout: (): Promise<AuthResponse> =>
+    fetchApi<AuthResponse>('/auth/logout', { method: 'POST' }),
     
   getCurrentUser: (): Promise<User> => 
     fetchApi<User>('/users/me'),

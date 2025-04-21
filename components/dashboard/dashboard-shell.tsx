@@ -1,11 +1,14 @@
 import type React from "react"
 import { SiteSelector } from "@/components/dashboard/site-selector"
+import { authApi } from "@/lib/api"
+import { useRouter } from "next/navigation"
 
 interface DashboardShellProps extends React.HTMLAttributes<HTMLDivElement> {
   enableSiteSelector?: boolean
 }
 
 export function DashboardShell({ children, className, enableSiteSelector = false, ...props }: DashboardShellProps) {
+  const router = useRouter();
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background">
@@ -23,10 +26,16 @@ export function DashboardShell({ children, className, enableSiteSelector = false
             </a>
             {/* <a href="/settings" className="text-sm font-medium">
               Settings
-            </a>
-            <a href="/logout" className="text-sm font-medium">
-              Logout
             </a> */}
+            <button 
+              onClick={async () => {
+                await authApi.logout();
+                router.push('/login');
+              }} 
+              className="text-sm font-medium cursor-pointer"
+            >
+              Logout
+            </button>
           </nav>
         </div>
       </header>
