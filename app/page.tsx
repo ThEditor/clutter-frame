@@ -62,8 +62,12 @@ export default function DashboardPage() {
     async function updateAnalyticsData() {
       if (!currentSite) return;
       try {
-        const analyticsData = await sitesApi.getSiteAnalytics(currentSite.id, new Date(Date.now() - 28*24*60*60*1000), new Date());
-        setAnalytics(analyticsData);
+        const analyticsData = await sitesApi.getSiteAnalytics(
+          currentSite.id,
+          new Date(Date.now() - 28 * 24 * 60 * 60 * 1000),
+          new Date()
+        );
+        setAnalytics(analytics?.page_views ? analyticsData : null);
       } catch (err) {
         toast({
           title: "Error",
@@ -126,20 +130,57 @@ export default function DashboardPage() {
         heading={`Analytics: ${currentSite.site_url}`}
         text="View your site statistics and insights."
       />
-      <div className="grid gap-4 lg:grid-cols-2">
-        <SiteStats title="Unique Visitors" value={String(analytics?.unique_visitors) ?? "N/A"} diff={12} />
-        <SiteStats title="Total Pageviews" value={String(analytics?.page_views) ?? "N/A"} diff={8} />
-        {/* <SiteStats title="Bounce Rate" value={"42%"} diff={-4} />
-        <SiteStats title="Visit Duration" value={"1m 32s"} diff={7} /> */}
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Overview className="col-span-4" siteId={currentSite.id} data={analytics?.visitor_graph ?? []} />
-        <TopSources className="col-span-3" data={analytics?.top_referrers ?? []} />
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <TopPages className="col-span-4" data={analytics?.top_pages ?? []} />
-        <RecentSales className="col-span-3" data={analytics?.device_stats ?? []} />
-      </div>
+      {analytics ? (
+        <>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <SiteStats
+              title="Unique Visitors"
+              value={String(analytics?.unique_visitors) ?? "N/A"}
+              diff={12}
+            />
+            <SiteStats
+              title="Total Pageviews"
+              value={String(analytics?.page_views) ?? "N/A"}
+              diff={8}
+            />
+            {/* <SiteStats title="Bounce Rate" value={"42%"} diff={-4} />
+    <SiteStats title="Visit Duration" value={"1m 32s"} diff={7} /> */}
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <Overview
+              className="col-span-4"
+              siteId={currentSite.id}
+              data={analytics?.visitor_graph ?? []}
+            />
+            <TopSources
+              className="col-span-3"
+              data={analytics?.top_referrers ?? []}
+            />
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <TopPages
+              className="col-span-4"
+              data={analytics?.top_pages ?? []}
+            />
+            <RecentSales
+              className="col-span-3"
+              data={analytics?.device_stats ?? []}
+            />
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center h-[60vh] space-y-4">
+          <div className="text-center space-y-3">
+            <h3 className="text-lg font-medium">No analytics data available</h3>
+            <p className="text-muted-foreground">
+              We haven't collected any data for this site yet.
+            </p>
+            <p className="text-muted-foreground text-sm">
+              Analytics data will appear here once visitors start browsing your site.
+            </p>
+          </div>
+        </div>
+      )}
     </DashboardShell>
   );
 }
