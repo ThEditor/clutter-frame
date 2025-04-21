@@ -22,36 +22,38 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 export default function SitesPage() {
   const [sites, setSites] = useState<Site[]>([]);
+  const [siteToBeDeleted, setSiteToBeDeleted] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const router = useRouter();
 
-  useEffect(() => {
-    async function fetchSites() {
-      try {
-        const sitesData = await sitesApi.getAllSites();
-        setSites(sitesData);
-      } catch (err) {
-        toast({
-          title: "Error",
-          description: "Failed to load your sites. Please try again.",
-          variant: "destructive",
-        });
 
-        // Check if error is due to authentication
-        const apiError = err as ApiError;
-        if (
-          apiError.status === 401 ||
-          apiError.message?.includes("unauthorized") ||
-          apiError.message?.includes("Unauthorized")
-        ) {
-          router.push("/login");
-        }
-      } finally {
-        setLoading(false);
+  async function fetchSites() {
+    try {
+      const sitesData = await sitesApi.getAllSites();
+      setSites(sitesData);
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Failed to load your sites. Please try again.",
+        variant: "destructive",
+      });
+
+      // Check if error is due to authentication
+      const apiError = err as ApiError;
+      if (
+        apiError.status === 401 ||
+        apiError.message?.includes("unauthorized") ||
+        apiError.message?.includes("Unauthorized")
+      ) {
+        router.push("/login");
       }
+    } finally {
+      setLoading(false);
     }
+  }
 
+  useEffect(() => {
     fetchSites();
   }, []);
 
@@ -124,7 +126,7 @@ export default function SitesPage() {
               </CardContent> */}
                 <CardFooter className="flex justify-between">
                   <AlertDialogTrigger asChild>
-                    <Button variant="outline"><Trash /></Button>
+                    <Button onClick={() => setSiteToBeDeleted(site.id)} variant="outline"><Trash /></Button>
                   </AlertDialogTrigger>
                   <Button asChild>
                     <Link href={{
@@ -149,8 +151,13 @@ export default function SitesPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
+            <AlertDialogCancel onClick={() => setSiteToBeDeleted(null)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={async () => {
+              if (siteToBeDeleted) {
+                await sitesApi.deleteSite(siteToBeDeleted);
+                await fetchSites();
+              }
+            }}>Continue</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
