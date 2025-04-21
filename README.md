@@ -84,6 +84,8 @@ JWT_SECRET=secret
 
 # Paper
 DATABASE_URL=clickhouse://default:@localhost:9000/clutter
+REDIS_URL=redis://user:pass@localhost:6379
+POSTGRES_URL=postgres://user:pass@localhost:5432/db
 PORT=8080
 ```
 
