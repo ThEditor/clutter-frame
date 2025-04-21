@@ -11,7 +11,10 @@ export function DashboardShell({ children, className, enableSiteSelector = false
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="container flex h-16 items-center justify-between py-4">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold">Clutter</h2>
+            <a href="/">
+              <h2 className="text-lg font-bold">Clutter</h2>
+            </a>
+              
             {enableSiteSelector && <SiteSelector />}
           </div>
           <nav className="flex items-center gap-4">
