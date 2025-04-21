@@ -67,7 +67,7 @@ export default function DashboardPage() {
           new Date(Date.now() - 28 * 24 * 60 * 60 * 1000),
           new Date()
         );
-        setAnalytics(analytics?.page_views ? analyticsData : null);
+        setAnalytics(analyticsData?.page_views ? analyticsData : null);
       } catch (err) {
         toast({
           title: "Error",
