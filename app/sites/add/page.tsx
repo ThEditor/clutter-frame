@@ -105,7 +105,7 @@ export default function AddSitePage() {
             </CardHeader>
             <CardContent>
               <pre className="rounded-md bg-muted p-4 overflow-x-auto">
-                <code>{`<script>window.clutterConfig={siteId:"${createdSiteId}"}</script><script defer src="https://raw.githubusercontent.com/ThEditor/clutter-ink/refs/heads/main/script.js"></script>`}</code>
+                <code>{`<script>window.clutterConfig={siteId:"${createdSiteId}"}</script><script defer src="https://cdn.jsdelivr.net/gh/ThEditor/clutter-ink/script.min.js"></script>`}</code>
               </pre>
               <p className="mt-4 text-sm text-muted-foreground">
                 Add this script to the <code>&lt;head&gt;</code> section of your website.
