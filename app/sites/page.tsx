@@ -18,21 +18,34 @@ import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { Site, ApiError } from "@/lib/types";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function SitesPage() {
   const [sites, setSites] = useState<Site[]>([]);
   const [siteToBeDeleted, setSiteToBeDeleted] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
 
-
   async function fetchSites() {
+    setLoading(true);
+    setError(false);
     try {
       const sitesData = await sitesApi.getAllSites();
-      setSites(sitesData);
+      setSites(sitesData || []);
     } catch (err) {
+      setError(true);
       toast({
         title: "Error",
         description: "Failed to load your sites. Please try again.",
@@ -68,6 +81,27 @@ export default function SitesPage() {
           {[1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-[200px] w-full" />
           ))}
+        </div>
+      </DashboardShell>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardShell>
+        <DashboardHeader
+          heading="Sites Unavailable"
+          text="We couldn't load your sites at the moment."
+        >
+          <Button onClick={() => fetchSites()}>Try Again</Button>
+        </DashboardHeader>
+        <div className="flex items-center justify-center h-[60vh]">
+          <div className="text-center space-y-4">
+            <p className="text-muted-foreground">
+              There was an error loading your sites.
+            </p>
+            <Button onClick={() => fetchSites()}>Refresh</Button>
+          </div>
         </div>
       </DashboardShell>
     );
@@ -126,15 +160,24 @@ export default function SitesPage() {
               </CardContent> */}
                 <CardFooter className="flex justify-between">
                   <AlertDialogTrigger asChild>
-                    <Button onClick={() => setSiteToBeDeleted(site.id)} variant="outline"><Trash /></Button>
+                    <Button
+                      onClick={() => setSiteToBeDeleted(site.id)}
+                      variant="outline"
+                    >
+                      <Trash />
+                    </Button>
                   </AlertDialogTrigger>
                   <Button asChild>
-                    <Link href={{
-                      pathname: '/',
-                      query: {
-                        for: site.id
-                      }
-                    }}>View Stats</Link>
+                    <Link
+                      href={{
+                        pathname: "/",
+                        query: {
+                          for: site.id,
+                        },
+                      }}
+                    >
+                      View Stats
+                    </Link>
                   </Button>
                 </CardFooter>
               </Card>
@@ -151,13 +194,19 @@ export default function SitesPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setSiteToBeDeleted(null)}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={async () => {
-              if (siteToBeDeleted) {
-                await sitesApi.deleteSite(siteToBeDeleted);
-                await fetchSites();
-              }
-            }}>Continue</AlertDialogAction>
+            <AlertDialogCancel onClick={() => setSiteToBeDeleted(null)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                if (siteToBeDeleted) {
+                  await sitesApi.deleteSite(siteToBeDeleted);
+                  await fetchSites();
+                }
+              }}
+            >
+              Continue
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
