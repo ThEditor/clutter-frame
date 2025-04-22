@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
@@ -13,7 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { User, Site, SiteAnalytics } from "@/lib/types";
 
-export default function DashboardPage() {
+export function ActualDashboardPage() {
   const forSiteId = useSearchParams().get("for");
   const router = useRouter();
   const { toast } = useToast();
@@ -183,4 +183,12 @@ export default function DashboardPage() {
       )}
     </DashboardShell>
   );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense>
+      <ActualDashboardPage />
+    </Suspense>
+  )
 }
