@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 export const metadata: Metadata = {
   title: "Clutter",
   description: "Analytics de-cluttered",
-  generator: "clutter.theditor.xyz",
+  generator: "clutter.phy0.in",
 };
 
 export default function RootLayout({

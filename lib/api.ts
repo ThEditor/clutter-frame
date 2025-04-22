@@ -1,6 +1,6 @@
 import { User, Site, AuthResponse, SiteAnalytics, ApiError } from "./types";
 
-export const API_BASE_URL = "https://studio.theditor.xyz";
+export const API_BASE_URL = "https://studio.phy0.in";
 
 export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
