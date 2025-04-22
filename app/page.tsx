@@ -65,7 +65,7 @@ export function ActualDashboardPage() {
         const analyticsData = await sitesApi.getSiteAnalytics(
           currentSite.id,
           new Date(Date.now() - 28 * 24 * 60 * 60 * 1000),
-          new Date()
+          new Date(Date.now() + 1 * 24 * 60 * 60 * 1000)
         );
         setAnalytics(analyticsData?.page_views ? analyticsData : null);
       } catch (err) {
