@@ -27,6 +27,10 @@ export function ActualDashboardPage() {
     async function checkAuth() {
       try {
         const userData = await authApi.getCurrentUser();
+        if (!userData.email_verified) {
+          router.push('/verify');
+          return;
+        }
         setUser(userData);
       } catch (err) {
         router.push("/login");

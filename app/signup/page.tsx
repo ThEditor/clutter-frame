@@ -56,8 +56,8 @@ export default function SignupPage() {
         description: data.message || "Account created successfully!",
       });
       
-      // Redirect to dashboard
-      router.push("/");
+      // Redirect to verify
+      router.push("/verify");
     } catch (err) {
       toast({
         title: "Registration Failed",

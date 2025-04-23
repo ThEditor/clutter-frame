@@ -56,6 +56,17 @@ export const authApi = {
       method: 'POST',
       body: JSON.stringify({ username, email, password }),
     }),
+  
+  generateCode: (): Promise<AuthResponse> =>
+    fetchApi<AuthResponse>('/auth/generate-code', {
+      method: 'POST',
+    }),
+
+  verify: (code: string): Promise<AuthResponse> =>
+    fetchApi<AuthResponse>('/auth/verify', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    }),
 
   logout: (): Promise<AuthResponse> =>
     fetchApi<AuthResponse>('/auth/logout', { method: 'POST' }),
