@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { sitesApi } from "@/lib/api";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { ApiError } from "@/lib/types";
 

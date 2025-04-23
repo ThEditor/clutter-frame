@@ -9,7 +9,7 @@ import { SiteStats } from "@/components/dashboard/site-stats";
 import { TopPages } from "@/components/dashboard/top-pages";
 import { TopSources } from "@/components/dashboard/top-sources";
 import { authApi, sitesApi } from "@/lib/api";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { User, Site, SiteAnalytics } from "@/lib/types";
 
